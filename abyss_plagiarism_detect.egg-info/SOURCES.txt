@@ -1,0 +1,14 @@
+LICENSE
+README.md
+setup.py
+abyss_plagiarism_detect.egg-info/PKG-INFO
+abyss_plagiarism_detect.egg-info/SOURCES.txt
+abyss_plagiarism_detect.egg-info/dependency_links.txt
+abyss_plagiarism_detect.egg-info/entry_points.txt
+abyss_plagiarism_detect.egg-info/requires.txt
+abyss_plagiarism_detect.egg-info/top_level.txt
+plagiarismdetect/__init__.py
+plagiarismdetect/__main__.py
+plagiarismdetect/detector.py
+plagiarismdetect/pywinnow.py
+plagiarismdetect/utils.py

@@ -1,0 +1,3 @@
+[console_scripts]
+plagiarismdetect = plagiarismdetect.__main__:main
+
