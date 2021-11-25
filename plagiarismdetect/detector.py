@@ -336,6 +336,14 @@ class CopyDetector:
         """
         self.ref_files = []
         self.ref_files.append(filename)
+    
+    def live_file(self, filename):
+            """Adds a file to the list of test files, reference files, or
+        boilerplate files. The "type" parameter should be one of
+        ["testref", "test", "ref", "boilerplate"]. "testref" will add
+        the file as both a test and reference file.
+        """
+        self.live_p = filename
 
     def _get_boilerplate_hashes(self):
         """Generates a list of hashes of the boilerplate text. Returns
@@ -396,6 +404,8 @@ class CopyDetector:
 
 
         for i, test_f in enumerate(test_f_list):
+            print(i)
+            print(self.live_p)
             for j, ref_f in enumerate(self.all_files):
                 if test_f not in self.file_data or ref_f not in self.file_data:
                     continue
