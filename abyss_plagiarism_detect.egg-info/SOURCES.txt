@@ -7,8 +7,12 @@ abyss_plagiarism_detect.egg-info/dependency_links.txt
 abyss_plagiarism_detect.egg-info/entry_points.txt
 abyss_plagiarism_detect.egg-info/requires.txt
 abyss_plagiarism_detect.egg-info/top_level.txt
+dist/abyss-plagiarism-detect-0.1.0.tar.gz
+dist/abyss_plagiarism_detect-0.1.0-cp39-cp39-win_amd64.whl
 plagiarismdetect/__init__.py
 plagiarismdetect/__main__.py
 plagiarismdetect/detector.py
 plagiarismdetect/pywinnow.py
 plagiarismdetect/utils.py
+plagiarismdetect/__pycache__/__init__.cpython-310.pyc
+plagiarismdetect/__pycache__/detector.cpython-310.pyc
