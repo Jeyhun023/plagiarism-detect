@@ -11,7 +11,7 @@ with open("README.md", "r") as readme_fp:
 setup(name="abyss-plagiarism-detect",
       author="Jeyhun Rashidov",
       author_email="creshidov23@gmail.com",
-      version="0.1.0",
+      version="0.1.1",
       description="Code plagiarism detection tool",
       long_description=readme,
       long_description_content_type="text/markdown",

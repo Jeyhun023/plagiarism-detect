@@ -1,20 +1,9 @@
-"""This module contains functions for detecting overlap between
-a set of test files (files to check for plagairism) and a set of
-reference files (files that might have been plagairised from).
-"""
-
 from pathlib import Path
 import numpy as np
 import logging
 from .utils import (filter_code, highlight_overlap, get_copied_slices,
                     get_document_fingerprints, find_fingerprint_overlap)
-import matplotlib.pyplot as plt
-import webbrowser
-import pkg_resources
-from jinja2 import Template
-from tqdm import tqdm
-import io
-import base64
+import os
 
 class CodeFingerprint:
     """Class for tokenizing, filtering, fingerprinting, and winnowing
@@ -328,7 +317,7 @@ class CopyDetector:
 
         return set(file_list)
 
-    def add_file(self, filename):
+    def add_file(self, filename, live_p):
         """Adds a file to the list of test files, reference files, or
         boilerplate files. The "type" parameter should be one of
         ["testref", "test", "ref", "boilerplate"]. "testref" will add
@@ -336,14 +325,7 @@ class CopyDetector:
         """
         self.ref_files = []
         self.ref_files.append(filename)
-    
-    def live_file(self, filename):
-            """Adds a file to the list of test files, reference files, or
-        boilerplate files. The "type" parameter should be one of
-        ["testref", "test", "ref", "boilerplate"]. "testref" will add
-        the file as both a test and reference file.
-        """
-        self.live_p = filename
+        self.live_p = live_p
 
     def _get_boilerplate_hashes(self):
         """Generates a list of hashes of the boilerplate text. Returns
@@ -404,36 +386,35 @@ class CopyDetector:
 
 
         for i, test_f in enumerate(test_f_list):
-            print(i)
-            print(self.live_p)
-            for j, ref_f in enumerate(self.all_files):
-                if test_f not in self.file_data or ref_f not in self.file_data:
-                    continue
-                elif test_f == ref_f:
-                    continue
-                elif self.similarity_matrix[i,j] != -1:
-                    continue
-                elif (self.all_files[i] not in self.test_files or
-                      self.all_files[j] not in self.ref_files):
-                    continue
-
-                if self.same_name_only:
-                    if Path(test_f).name != Path(ref_f).name:
+            if(os.path.basename(test_f) != self.live_p):
+                for j, ref_f in enumerate(self.all_files):
+                    if test_f not in self.file_data or ref_f not in self.file_data:
                         continue
-                if self.ignore_leaf:
-                    if Path(test_f).parent == Path(ref_f).parent:
+                    elif test_f == ref_f:
+                        continue
+                    elif self.similarity_matrix[i,j] != -1:
+                        continue
+                    elif (self.all_files[i] not in self.test_files or
+                        self.all_files[j] not in self.ref_files):
                         continue
 
-                overlap, (sim1,sim2), (slices1,slices2) = compare_files(
-                    self.file_data[test_f], self.file_data[ref_f])
+                    if self.same_name_only:
+                        if Path(test_f).name != Path(ref_f).name:
+                            continue
+                    if self.ignore_leaf:
+                        if Path(test_f).parent == Path(ref_f).parent:
+                            continue
 
-                self.similarity_matrix[i,j] = sim1
-                self.slice_matrix[i][j] = [slices1, slices2]
-                self.similarity_matrix[j,i] = sim2
-                self.slice_matrix[j][i] = [slices2,slices1]
+                    overlap, (sim1,sim2), (slices1,slices2) = compare_files(
+                        self.file_data[test_f], self.file_data[ref_f])
 
-                self.token_overlap_matrix[i,j] = overlap
-                self.token_overlap_matrix[j,i] = overlap
+                    self.similarity_matrix[i,j] = sim1
+                    self.slice_matrix[i][j] = [slices1, slices2]
+                    self.similarity_matrix[j,i] = sim2
+                    self.slice_matrix[j][i] = [slices2,slices1]
+
+                    self.token_overlap_matrix[i,j] = overlap
+                    self.token_overlap_matrix[j,i] = overlap
 
 
     def run(self):
@@ -517,4 +498,3 @@ class CopyDetector:
             print(False)
             
         return
-      
